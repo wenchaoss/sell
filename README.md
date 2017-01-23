@@ -2,26 +2,20 @@
 
 > sell app
 
-## Build Setup
+## 运行步骤（需要mongodb）
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+# 运行mongodb
+monogod --dbpath yourpath
 
-# build for production with minification
-npm run build
+# 运行node服务器
+node app.js
 
-# run unit tests
-npm run unit
+# 监听端口3003
+http://localhost:3003
 
-# run e2e tests
-npm run e2e
 
-# run all tests
-npm test
-```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
