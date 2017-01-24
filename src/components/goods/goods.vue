@@ -98,7 +98,7 @@
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
 
-      this.$http.get('/api/goods').then((res) => {
+      this.$http.get('/goods').then((res) => {
         res = res.body;
         if (res.errno === ERR_OK) {
           this.goods = res.data;

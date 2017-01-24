@@ -114,7 +114,7 @@
           return;
         }
         this.favorite = !this.favorite;
-        saveToLocal(this.seller.id, 'favorite', this.favorite);
+        // saveToLocal(this.seller.id, 'favorite', this.favorite);
       },
       _initScroll() {
         if (!this.scroll) {

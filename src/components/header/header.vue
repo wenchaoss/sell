@@ -23,6 +23,9 @@
           <i class="icon-keyboard_arrow_right"></i>
         </div>
       </div>
+      <div class="gohome" v-link="{path:'/home'}">
+        <img src="home.png">
+      </div>
     </div>
     <div class="bulletin-wrapper"  @click="showDetail">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span><i class="icon-keyboard_arrow_right"></i>
@@ -68,6 +71,8 @@
 
 <script type="text/ecmascript-6">
   import star from 'components/star/star';
+  import Vue from 'vue';
+
   export default {
     props: {
       seller:{
@@ -76,9 +81,11 @@
     },
     data() {
       return {
-        detailShow: false
+        detailShow: false,
+        _seller: {}
       }
     },
+
     methods: {
       showDetail() {
         this.detailShow = true
@@ -88,6 +95,8 @@
       }
     },
     created() {
+      console.log(this.seller,111)
+      // Vue.set(this._seller,this.seller)
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
     },
     components: {
@@ -304,5 +313,9 @@
         font-size: 32px
 
 
+    .gohome
+      position: absolute
+      top: 19px
+      right: 15px
 </style>
 

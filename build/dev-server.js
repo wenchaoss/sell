@@ -2,10 +2,27 @@ var path = require('path')
 var express = require('express')
 var webpack = require('webpack')
 var config = require('../config')
+var router = require('../controller/router')
+var session = require('express-session');
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
+
+//数据库连接
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/sell');
+var app = express()
+//设置session
+app.use(session({
+  secret: 'houtai',
+  // 过期时间，10天
+  expires : new Date(Date.now() + 1000 * 60 * 60 * 24 * 10),
+  // 两个默认的配置，API要求
+  resave: false,
+  saveUninitialized: true
+}));
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -13,9 +30,10 @@ var port = process.env.PORT || config.dev.port
 // https://github.com/chimurai/http-proxy-middleware
 var proxyTable = config.dev.proxyTable
 
-var app = express()
+
 //定义mock数据请求
 var appData = require('../data.json');
+var allseller = require('../allseller.json');
 var seller = appData.seller;
 var goods = appData.goods;
 var ratings = appData.ratings;
@@ -39,7 +57,18 @@ apiRoutes.get('/ratings',function (req,res) {
     data: ratings
   });
 })
-app.use('/api', apiRoutes);
+apiRoutes.get('/allSeller',function (req,res) {
+  res.json({
+    errno: 0,
+    data: allseller
+  });
+})
+//业务逻辑
+apiRoutes.get('/checkLogin',router.checkLogin);
+
+
+
+app.use(apiRoutes);
 
 
 

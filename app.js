@@ -4,10 +4,15 @@ var app = express();
 var router = require('./controller/router.js');
 var session = require('express-session');
 var indexRouter = express.Router();
+var Seller = require('./models/Seller');
 
 //数据库连接
 var mongoose = require('mongoose');
+
 mongoose.connect('mongodb://localhost/sell');
+
+
+
 //设置session
 app.use(session({
   secret: 'houtai',
@@ -18,42 +23,16 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.get('/seller',router.getSeller);
+app.get('/goods',router.getGoods);
+app.get('/ratings',router.getRatings);
+
 indexRouter.get('/', function (req, res, next) {
   req.url = '/index.html';
   next();
 });
 
 app.use(indexRouter);
-
-var appData = require('./data2.json');
-var seller = appData.seller;
-var goods = appData.goods;
-var ratings = appData.ratings;
-
-var apiRoutes = express.Router();
-
-apiRoutes.get('/seller', function (req, res) {
-  res.json({
-    errno: 0,
-    data: seller
-  });
-});
-
-apiRoutes.get('/goods', function (req, res) {
-  res.json({
-    errno: 0,
-    data: goods
-  });
-});
-
-apiRoutes.get('/ratings', function (req, res) {
-  res.json({
-    errno: 0,
-    data: ratings
-  });
-});
-
-app.use('/api', apiRoutes);
 
 
 app.use(express.static("./dist"));
