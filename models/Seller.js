@@ -3,6 +3,9 @@ var Schema = mongoose.Schema;
 
 var sellerSchema = new Schema({
   "seller": {
+    "username": String,             //商家登录名
+    "password": String,             //商家密码
+    "checkout": Number,             //当为1时，表示暂不合格不上首页
     "name": String,                 //店铺名
     "description": String,          //描述（快递描述，首页）
     "deliveryTime": Number,         //送达时间
@@ -68,7 +71,17 @@ var sellerSchema = new Schema({
     }
   ]
 })
-
+//检查用户是否被占用
+sellerSchema.statics.checkExist = function(username,callback){
+  //this指向类名，非Schema
+  this.find({'username': username},function(err,results){
+    if(results.length == 0){
+      callback(false);
+    }else{
+      callback(true);
+    }
+  });
+};
 
 
 var Seller = mongoose.model("sellers",sellerSchema);

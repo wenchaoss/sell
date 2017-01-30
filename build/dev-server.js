@@ -65,9 +65,10 @@ apiRoutes.get('/allSeller',function (req,res) {
 })
 //业务逻辑
 apiRoutes.get('/checkLogin',router.checkLogin);
-
-
-
+apiRoutes.post('/login',router.login);
+apiRoutes.get('/logout',router.logout);
+apiRoutes.get("/checkexist",router.checkExist);
+app.post('/createuser',router.createuser);
 app.use(apiRoutes);
 
 

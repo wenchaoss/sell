@@ -5,21 +5,58 @@
     </div>
     <split></split>
     <div class="login-wrapper">
-      <div class="info" v-show="username || !logpage">
-
+      <div class="info" v-show="userdetail && !sub">
+        <p>欢迎！ {{userdetail}}</p>
+        <button class="person">查看个人中心</button>
+        <button class="logout" @click="logout">退出</button>
       </div>
-      <div class="login" v-show="!username || !logpage">
-        <div class="left">
+      <div class="login" v-show="!userdetail && !logpage && !sub">
+        <div class="left" @click="touser">
           <img src="ke.png">
           <p>用户登录</p>
         </div>
-        <div class="right">
+        <div class="right" @click="tosell">
           <img src="shang.png">
           <p>商家登录</p>
         </div>
       </div>
-      <div class="longin" v-show="logpage">
-
+      <div class="logpage" v-show="logpage && !userdetail && !sub">
+        <div class="username">
+          用户名： <input type="text" v-model="log.username">
+        </div>
+        <div class="password">
+          &emsp;密码： <input type="password" v-model="log.password">
+        </div>
+        <div class="btn">
+          <button @click="login">登录</button>
+          <button class="sub" @click="subon">注册</button>
+          <button class="goback" @click="goback">返回</button>
+        </div>
+      </div>
+      <div class="sub" v-show="sub">
+        <div class="username">
+          用户名： <input type="text" @change="checkusername" v-model="subinfo.username" placeholder="6~18位不允许中文特殊字符">
+          <i class="err" v-show="usernamebol === 1">X</i>
+          <i class="right" v-show="usernamebol === 0">√</i>
+        </div>
+        <div class="password">
+          &emsp;密码： <input type="password" @change="checkpas" v-model="subinfo.password" placeholder="6~18位不允许中文特殊字符">
+          <i class="err" v-show="passwordbol === 1">X</i>
+          <i class="right" v-show="passwordbol === 0">√</i>
+        </div>
+        <div class="password2">
+          再次输入： <input type="password" @change="checkpas" v-model="subinfo.password2" placeholder="请再次输入密码">
+          <i class="err" v-show="passwordbol === 1">X</i>
+          <i class="right" v-show="passwordbol === 0">√</i>
+        </div>
+        <div class="type">
+          <label>用户<input @change="cls" type="radio" v-model="subinfo.subtype" value="true" checked></label>
+          <label>商家<input @change="cls" type="radio" v-model="subinfo.subtype" value="false"></label>
+        </div>
+        <div class="btn">
+          <button class="sub" @click="dosub">提交</button>
+          <button class="goback" @click="goback" >返回</button>
+        </div>
       </div>
     </div>
     <split></split>
@@ -62,15 +99,138 @@
     },
     data() {
       return {
-        logpage: false
+        logpage: false,
+        logintype: true,
+        sub: false,
+        usernamebol: 2,           //用户名验证，0正确，1错误，2不显示
+        passwordbol: 2,           //密码验证，0正确，1错误，2不显示
+        log: {
+          username: '',
+          password: '',
+          logintype: true
+        },
+        subinfo: {
+          username: '',
+          password: '',
+          password2: '',
+          subtype: true         //true默认注册用户
+        },
+        userdetail: ''
       }
     },
     created() {
-
+      this.$http.get('/checkLogin').then((res) => {
+        if(res.data){
+          this.userdetail = res.data.data
+        }
+      })
     },
+    // watch: {
+    //   'subinfo.subtype' : 'checkusername'
+    // },
     methods: {
       changeSeller(seller) {
         this.$dispatch('changeseller',seller)
+      },
+      login() {
+        //true为用户登录
+        if(this.logintype){
+          this.log.logintype = true;
+        }else {
+          this.log.logintype = false;
+        }
+        this.$http.post('login',this.log).then((res) => {
+          // console.log(res.data)
+          if(res.data == -1){
+            alert("对不起！服务器错误");
+            return;
+          }else if(res.data == -2){
+            alert("对不起！没有这个用户");
+            return;
+          }else if(res.data == -3){
+            alert("对不起！密码错误");
+            return;
+          }
+          alert("登录成功！")
+          this.userdetail = res.data;
+        })
+      },
+      logout() {
+        this.$http.get('logout').then((res) => {
+          if(res.data==1){
+            this.userdetail = null;
+            alert("成功登出！")
+          }
+        })
+      },
+      //用户登录切换
+      touser() {
+        this.logpage = true;
+        this.logintype = true;
+      },
+      tosell() {
+        this.logpage = true;
+        this.logintype = false;
+      },
+      //重新选择登录
+      goback() {
+        this.logpage = false;
+        this.sub = false;
+      },
+      subon() {
+        this.sub = true;
+      },
+      checkusername() {
+        if(! /^\w{5,17}$/.test(this.subinfo.username)){
+          this.usernamebol = 1
+        }else {
+          this.$http.get('/checkexist?'+'username='+this.subinfo.username + '&subtype=' + this.subinfo.subtype).then((res) => {
+            console.log(res.body)
+            //false 表示未被占用
+            if(res.body == 'false'){
+              this.usernamebol = 0;
+            }else{
+              this.usernamebol = 1;
+            }
+
+          })
+        }
+      },
+      checkpas() {
+        if(!this.subinfo.password || !this.subinfo.password2){
+          //两个密码框存在没有输入的，就不显示
+          this.passwordbol = 2;
+        }else if(this.subinfo.password != this.subinfo.password2){
+          this.passwordbol = 1;
+        }else{
+          this.passwordbol = 0;
+        }
+      },
+      cls() {
+        //切换注册方式
+        this.subinfo.username = '';
+        this.subinfo.password = '';
+        this.subinfo.password2 = '';
+        this.usernamebol = 2;
+        this.passwordbol = 2;
+      },
+      dosub() {
+        if(this.usernamebol === 0 && this.passwordbol === 0){
+          this.$http.post('/createuser',{
+            username: this.subinfo.username,
+            password: this.subinfo.password,
+            subtype : this.subinfo.subtype
+          })
+            .then((res) => {
+              alert("恭喜！注册成功");
+              this.subinfo = {};
+              this.subinfo.subtype = true;
+              this.logpage = false;
+              this.sub = false;
+              this.usernamebol = 2;
+              this.passwordbol = 2;
+            })
+        }
       }
     },
     components: {
@@ -95,6 +255,18 @@
       text-align: center
   .login-wrapper
     padding-bottom: 10px
+    .info
+      padding: 10px
+      p
+        margin-bottom: 15px
+      button
+        display: inline-block
+        border: 1px solid #fff
+        border-radius: 5px
+        padding: 10px 25px
+      .person
+        margin-left: 15px
+
     .login
       display: flex
       width: 100%
@@ -106,6 +278,69 @@
           font-weight: 700
         img
           width: 50%
+    .logpage
+      padding: 10px 0 10px 40px
+      .btn
+        position: relative
+      .password
+        margin: 15px 0
+      input
+        width: auto
+      button
+        display: inline-block
+        /*margin: 0 auto*/
+        /*margin-left: 50px*/
+        margin-right: 10px
+        margin-top: 10px
+        border: 1px solid #fff
+        border-radius: 5px
+        padding: 10px 25px
+      input
+        border: 1px solid #999
+        border-radius: 5px
+        padding: 5px
+
+
+    .sub
+      padding: 10px 0 10px 25px
+      position: relative
+      i
+        display: inline-block
+        width: 11px
+        height: 12px
+        font-size: 12px
+        line-height: 12px
+        background-color: red
+        color: #fff
+        border-radius: 3px
+        &.right
+          background-color: rgb(0, 151, 255)
+      .username
+      .password
+        margin: 15px 0
+      .password2
+        margin-left: -17px
+        margin-bottom: 10px
+      input
+        border: 1px solid #999
+        border-radius: 5px
+        padding: 5px
+      .type
+        margin-left: 15px
+        label
+          margin-right: 20px
+      .btn
+        margin-left: 20px
+        position: relative
+        button
+          display: inline-block
+          /*margin: 0 auto*/
+          /*margin-left: 50px*/
+          margin-right: 10px
+          margin-top: 10px
+          border: 1px solid #fff
+          border-radius: 5px
+          padding: 10px 25px
   .sellers
     .seller-item
       position: relative
