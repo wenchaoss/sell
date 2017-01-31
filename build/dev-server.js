@@ -39,36 +39,39 @@ var goods = appData.goods;
 var ratings = appData.ratings;
 
 var apiRoutes = express.Router();
-apiRoutes.get('/seller',function (req,res) {
-  res.json({
-    errno: 0,
-    data: seller
-  });
-})
-apiRoutes.get('/goods',function (req,res) {
-  res.json({
-    errno: 0,
-    data: goods
-  });
-})
-apiRoutes.get('/ratings',function (req,res) {
-  res.json({
-    errno: 0,
-    data: ratings
-  });
-})
-apiRoutes.get('/allSeller',function (req,res) {
-  res.json({
-    errno: 0,
-    data: allseller
-  });
-})
+// apiRoutes.get('/seller',function (req,res) {
+//   res.json({
+//     errno: 0,
+//     data: seller
+//   });
+// })
+// apiRoutes.get('/goods',function (req,res) {
+//   res.json({
+//     errno: 0,
+//     data: goods
+//   });
+// })
+// apiRoutes.get('/ratings',function (req,res) {
+//   res.json({
+//     errno: 0,
+//     data: ratings
+//   });
+// })
+// apiRoutes.get('/allSeller',function (req,res) {
+//   res.json({
+//     errno: 0,
+//     data: allseller
+//   });
+// })
+apiRoutes.get('/allSeller',router.allSeller)
 //业务逻辑
 apiRoutes.get('/checkLogin',router.checkLogin);
 apiRoutes.post('/login',router.login);
 apiRoutes.get('/logout',router.logout);
 apiRoutes.get("/checkexist",router.checkExist);
-app.post('/createuser',router.createuser);
+apiRoutes.post('/createuser',router.createuser);
+apiRoutes.post('/pay',router.pay);
+
 app.use(apiRoutes);
 
 

@@ -79,17 +79,26 @@
       };
     },
     created() {
-      this.$http.get('/ratings').then((response) => {
-        response = response.body;
-        if (response.errno === ERR_OK) {
-          this.ratings = response.data;
-          this.$nextTick(() => {
-            this.scroll = new BScroll(this.$els.ratings, {
-              click: true
-            });
+      if(this.seller){
+        this.ratings = this.seller.ratings;
+        this.seller = this.seller.seller;
+        this.$nextTick(() => {
+          this.scroll = new BScroll(this.$els.ratings, {
+            click: true
           });
-        }
-      });
+        });
+      }
+      // this.$http.get('/ratings').then((response) => {
+      //   response = response.body;
+      //   if (response.errno === ERR_OK) {
+      //     this.ratings = response.data;
+      //     this.$nextTick(() => {
+      //       this.scroll = new BScroll(this.$els.ratings, {
+      //         click: true
+      //       });
+      //     });
+      //   }
+      // });
     },
     methods: {
       needShow(type, text) {

@@ -39,7 +39,7 @@
     </div>
   </div>
   <!--定义v-shopcart，在methods里可以通过this.$refs.sho...访问到子组件 -->
-  <shopcart v-ref:shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+  <shopcart v-ref:shopcart :userdetail="userdetail" :seller="seller" :select-foods="selectFoods" :delivery-price="seller.seller.deliveryPrice" :min-price="seller.seller.minPrice"></shopcart>
   <!--food详情页组件-->
   <div>
     <food :food="selectedFood" v-ref:food></food>
@@ -58,6 +58,9 @@
   export default {
     props: {
       seller: {
+        type: Object
+      },
+      userdetail: {
         type: Object
       }
     },
@@ -96,22 +99,25 @@
       }
     },
     created() {
+      if(this.seller){
+        // console.log(this.seller.goods)
+        this.goods = this.seller.goods;
+        this.$nextTick(() => {
+          this._initScroll();
+          this._calculateHeight();
+        });
+      }
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-
-      this.$http.get('/goods').then((res) => {
-        res = res.body;
-        if (res.errno === ERR_OK) {
-          this.goods = res.data;
-          // console.log(this.goods)
-          //dom更新是异步的，在$nextTick()中才会执行dom的更新
-          this.$nextTick(() => {
-            this._initScroll();
-            this._calculateHeight();
-          });
-        }
-      });
     },
     methods: {
+      //数据变化监听 切换goods
+      changeseller() {
+        this.goods = this.seller.goods;
+        this.$nextTick(() => {
+          this._initScroll();
+          this._calculateHeight();
+        });
+      },
       selectMenu(index, event) {
         //BS库里面点击事件存在这个属性，浏览器默认点击事件没有这个属性，可以防止执行两次
         if (!event._constructed) {
@@ -171,10 +177,18 @@
       cartcontrol,
       food
     },
+    watch: {
+      'seller' : 'changeseller'
+    },
     //接受cartcontrol组件传递的事件，小球掉落位置
     events: {
       'cart.add'(target) {
         this._drop(target);
+      },
+      //清空购物车
+      clearshopcart(){
+        this.selectedFood = {};
+        console.log(111)
       }
     }
   };

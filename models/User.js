@@ -19,9 +19,5 @@ userSchema.statics.checkExist = function(username,callback){
 };
 var User = mongoose.model("users",userSchema);
 
-var defaultUser = new User({
-  username: "wenchao@qq.com",
-  password: "yezizhuhao"
-})
-defaultUser.save()
+
 module.exports = User;

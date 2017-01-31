@@ -55,7 +55,7 @@
       "type": -1,
       "foods": [
         {
-          "name": "皮蛋瘦肉粥",
+          "name": "第一家的皮蛋瘦肉粥",
           "price": 10,
           "oldPrice": "",
           "description": "咸粥",
@@ -1132,7 +1132,7 @@
       "deliveryTime": 30,
       "score": 5,
       "rateType": 0,
-      "text": "不错,粥很好喝,我经常吃这一家,非常赞,以后也会常来吃,强烈推荐.",
+      "text": "第一家不错,粥很好喝,我经常吃这一家,非常赞,以后也会常来吃,强烈推荐.",
       "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png",
       "recommend": [
         "南瓜粥",
@@ -1433,7 +1433,7 @@
       "type": -1,
       "foods": [
         {
-          "name": "皮蛋瘦肉粥",
+          "name": "第二家的皮蛋瘦肉粥",
           "price": 10,
           "oldPrice": "",
           "description": "咸粥",
@@ -2510,7 +2510,7 @@
       "deliveryTime": 30,
       "score": 5,
       "rateType": 0,
-      "text": "不错,粥很好喝,我经常吃这一家,非常赞,以后也会常来吃,强烈推荐.",
+      "text": "第二家不错,粥很好喝,我经常吃这一家,非常赞,以后也会常来吃,强烈推荐.",
       "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png",
       "recommend": [
         "南瓜粥",
@@ -2812,7 +2812,7 @@
       "type": -1,
       "foods": [
         {
-          "name": "皮蛋瘦肉粥",
+          "name": "第三家的皮蛋瘦肉粥",
           "price": 10,
           "oldPrice": "",
           "description": "咸粥",
@@ -3889,7 +3889,7 @@
       "deliveryTime": 30,
       "score": 5,
       "rateType": 0,
-      "text": "不错,粥很好喝,我经常吃这一家,非常赞,以后也会常来吃,强烈推荐.",
+      "text": "第三家不错,粥很好喝,我经常吃这一家,非常赞,以后也会常来吃,强烈推荐.",
       "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png",
       "recommend": [
         "南瓜粥",

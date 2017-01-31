@@ -5,17 +5,24 @@ var url = require("url");
 
 var Seller = require('../models/Seller');
 var User = require('../models/User');
+var Order = require('../models/Order');
 
 //检查是否登录
 exports.checkLogin = function(req,res){
   if(req.session.login == true){
     res.send({
-      data: req.session.username,
+      data: {
+        username: req.session.username,
+        type: req.session.usertype
+      },
       errno: 0
     })
   }else{
     res.send({
-      data: '',
+      data: {
+        username: '',
+        type: true
+      },
       errno: 0
     })
   }
@@ -51,7 +58,10 @@ exports.login = function (req,res) {
         req.session.login = true;
         req.session.username = username;
         req.session.usertype = true;      //用户状态为用户，false为商家
-        res.send(results[0].username);
+        res.send( {
+          username: results[0].username,
+          type: type
+        });
       })
     }else{
       res.send("-1");
@@ -126,6 +136,47 @@ exports.createuser = function(req,res){
   })
 };
 
+var setDateString = function () {
+
+  return new Date().getFullYear().toString() + (new Date().getMonth() <9 ? ('0' + (new Date().getMonth()+1).toString()) : (new Date().getMonth()+1).toString()).toString() + (new Date().getDate() <9 ? ('0' + (new Date().getDate()).toString()) : (new Date().getDate()).toString()).toString() + (parseInt(Math.random()*10000)).toString()
+
+}
+//支付创建订单
+//-1服务器错误
+//返回订单号成功
+exports.pay = function (req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    var order = fields;
+    order.date = +new Date();
+    order.ordernumber = setDateString();
+    order.process = 0;
+    var v = new Order(order);
+    v.save(function(err){
+      if(err){
+        res.send("-1");
+        return;
+      }
+      res.send(order.ordernumber);
+    })
+
+  })
+}
+
+
+exports.allSeller = function (req,res) {
+  Seller.find({},function (err,results) {
+    if(err){res.send("-1");return;}
+    res.json({
+      errno: 0,
+      data: results
+    })
+  })
+}
 // exports.getSeller = function (req,res) {
 //   Seller.find({"seller.name": "第二个商家"},function (err,results) {
 //     if(err){

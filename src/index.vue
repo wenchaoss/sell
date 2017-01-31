@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view :allseller="allseller" :seller="showseller.seller" keep-alive></router-view>
+    <router-view :allseller="allseller" :seller="showseller" :userdetail="userdetail" ></router-view>
   </div>
 
 </template>
@@ -13,7 +13,11 @@
       return {
         allseller: [],
         showseller: {},
-        username: ''
+        // username: '',
+        userdetail: {
+          username: '',
+          type: true
+        }
       };
     },
     created() {
@@ -24,16 +28,18 @@
           // console.log(this.allseller)
         }
       });
-      this.$http.get('/checkLogin').then((res) => {
-        if(res.body.data){
-          this.username = res.body.data;
-        }
-      })
+      // this.$http.get('/checkLogin').then((res) => {
+      //   if(res.body.data){
+      //     this.username = res.body.data;
+      //   }
+      // })
     },
     events: {
       'changeseller'(seller){
-        // console.log(seller);
         this.showseller = seller;
+      },
+      'checkuserdetail'(userdetail){
+        this.userdetail = userdetail;
       }
     }
   };

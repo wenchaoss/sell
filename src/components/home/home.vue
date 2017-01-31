@@ -5,12 +5,12 @@
     </div>
     <split></split>
     <div class="login-wrapper">
-      <div class="info" v-show="userdetail && !sub">
-        <p>欢迎！ {{userdetail}}</p>
+      <div class="info" v-show="userdetail.username && !sub">
+        <p>欢迎！ {{userdetail.username}}</p>
         <button class="person">查看个人中心</button>
         <button class="logout" @click="logout">退出</button>
       </div>
-      <div class="login" v-show="!userdetail && !logpage && !sub">
+      <div class="login" v-show="!userdetail.username && !logpage && !sub">
         <div class="left" @click="touser">
           <img src="ke.png">
           <p>用户登录</p>
@@ -20,7 +20,7 @@
           <p>商家登录</p>
         </div>
       </div>
-      <div class="logpage" v-show="logpage && !userdetail && !sub">
+      <div class="logpage" v-show="logpage && !userdetail.username && !sub">
         <div class="username">
           用户名： <input type="text" v-model="log.username">
         </div>
@@ -115,13 +115,17 @@
           password2: '',
           subtype: true         //true默认注册用户
         },
-        userdetail: ''
+        userdetail: {
+          username: '',
+          type: true
+        }
       }
     },
     created() {
       this.$http.get('/checkLogin').then((res) => {
         if(res.data){
-          this.userdetail = res.data.data
+          this.userdetail = res.data.data;
+          this.$dispatch('checkuserdetail',this.userdetail)
         }
       })
     },
@@ -153,12 +157,17 @@
           }
           alert("登录成功！")
           this.userdetail = res.data;
+          this.$dispatch('checkuserdetail',this.userdetail)
         })
       },
       logout() {
         this.$http.get('logout').then((res) => {
           if(res.data==1){
-            this.userdetail = null;
+            this.userdetail = {
+              username: '',
+              type: true
+            };
+            this.$dispatch('checkuserdetail',this.userdetail)
             alert("成功登出！")
           }
         })

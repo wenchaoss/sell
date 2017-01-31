@@ -68,6 +68,12 @@
       minPrice: {
         type: Number,
         default: 0
+      },
+      userdetail: {
+        type: Object
+      },
+      seller: {
+        type: Object
       }
     },
     //下落球
@@ -94,6 +100,9 @@
         //购物车是否折叠
         fold: true
       };
+    },
+    created() {
+      // console.log(this.userdetail,this.selectFoods)
     },
     computed: {
       //总价
@@ -167,11 +176,46 @@
       hideList() {
         this.fold = true;
       },
+      setDateString() {
+
+      },
       pay() {
         if (this.totalPrice < this.minPrice) {
           return;
         }
-        window.alert(`支付${this.totalPrice}元`);
+        console.log(this.selectFoods);
+        // console.log(this.seller);
+        // console.log(this.userdetail);
+        if(!this.userdetail.username){
+          alert("请先登录！");
+          return;
+        }
+        if(!this.userdetail.type){
+          alert("商家不可购买！");
+          return;
+        }
+        this.selectFoods.forEach(function (value,index,arr) {
+          arr[index] = {
+            name: arr[index].name,
+            count: arr[index].count,
+            price: arr[index].price,
+            oldPrice: arr[index].oldPrice
+          }
+        })
+        // console.log(this.seller.seller.name)
+        this.$http.post('/pay',{
+          user: this.userdetail.username,
+          seller_id: this.seller._id,
+          seller_name: this.seller.seller.name,
+          foods: this.selectFoods,
+          price: this.totalPrice
+        })
+          .then((res) => {
+          this.empty()
+          alert("支付成功！请到个人中心查看订单");
+          // this.$dispatch('clearshopcart');
+        });
+        // window.alert(`支付${this.totalPrice}元`);
       },
       drop(el) {
         for (let i = 0; i < this.balls.length; i++) {

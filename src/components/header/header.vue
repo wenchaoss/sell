@@ -95,8 +95,6 @@
       }
     },
     created() {
-      console.log(this.seller,111)
-      // Vue.set(this._seller,this.seller)
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
     },
     components: {

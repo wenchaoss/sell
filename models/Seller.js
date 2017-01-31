@@ -86,14 +86,14 @@ sellerSchema.statics.checkExist = function(username,callback){
 
 var Seller = mongoose.model("sellers",sellerSchema);
 
-var mock1 = require('../data2.json');
-var mock2 = require('../data3.json');
-var mock3 = require('../data4.json');
-var mockSeller1 = new Seller(mock1);
-var mockSeller2 = new Seller(mock2);
-var mockSeller3 = new Seller(mock3);
-mockSeller1.save();
-mockSeller2.save();
-mockSeller3.save();
+// var mock1 = require('../newdata1.json');
+// var mock2 = require('../newdata2.json');
+// var mock3 = require('../newdata3.json');
+// var mockSeller1 = new Seller(mock1);
+// var mockSeller2 = new Seller(mock2);
+// var mockSeller3 = new Seller(mock3);
+// mockSeller1.save();
+// mockSeller2.save();
+// mockSeller3.save();
 
 module.exports = Seller;
