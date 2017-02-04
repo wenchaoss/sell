@@ -7,6 +7,7 @@ import home from 'components/home/home';
 import goods from 'components/goods/goods';
 import ratings from 'components/ratings/ratings';
 import seller from 'components/seller/seller';
+import personal from 'components/personal/personal';
 
 import 'common/stylus/index.styl';      //引入全局css样式
 
@@ -36,6 +37,9 @@ let router = new VueRouter({
 router.map({
   '/home':{
     component: home
+  },
+  '/personal': {
+    component: personal
   },
   '/detail':{
     component: App,

@@ -183,9 +183,6 @@
         if (this.totalPrice < this.minPrice) {
           return;
         }
-        console.log(this.selectFoods);
-        // console.log(this.seller);
-        // console.log(this.userdetail);
         if(!this.userdetail.username){
           alert("请先登录！");
           return;
@@ -194,28 +191,27 @@
           alert("商家不可购买！");
           return;
         }
+        //避免污染selectFoods
+        var newarr = [];
         this.selectFoods.forEach(function (value,index,arr) {
-          arr[index] = {
+          newarr[index] = {
             name: arr[index].name,
             count: arr[index].count,
             price: arr[index].price,
             oldPrice: arr[index].oldPrice
           }
         })
-        // console.log(this.seller.seller.name)
         this.$http.post('/pay',{
           user: this.userdetail.username,
           seller_id: this.seller._id,
           seller_name: this.seller.seller.name,
-          foods: this.selectFoods,
+          foods: newarr,
           price: this.totalPrice
         })
           .then((res) => {
           this.empty()
           alert("支付成功！请到个人中心查看订单");
-          // this.$dispatch('clearshopcart');
         });
-        // window.alert(`支付${this.totalPrice}元`);
       },
       drop(el) {
         for (let i = 0; i < this.balls.length; i++) {

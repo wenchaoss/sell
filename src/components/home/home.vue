@@ -7,7 +7,7 @@
     <div class="login-wrapper">
       <div class="info" v-show="userdetail.username && !sub">
         <p>欢迎！ {{userdetail.username}}</p>
-        <button class="person">查看个人中心</button>
+        <button class="person" v-link="{path:'/personal'}">查看个人中心</button>
         <button class="logout" @click="logout">退出</button>
       </div>
       <div class="login" v-show="!userdetail.username && !logpage && !sub">
@@ -158,6 +158,7 @@
           alert("登录成功！")
           this.userdetail = res.data;
           this.$dispatch('checkuserdetail',this.userdetail)
+          console.log(this.userdetail)
         })
       },
       logout() {
