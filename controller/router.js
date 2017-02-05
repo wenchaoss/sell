@@ -143,7 +143,7 @@ var setDateString = function () {
 }
 //支付创建订单
 //-1服务器错误
-//返回订单号成功
+//返回订单mongo _id成功
 exports.pay = function (req,res) {
   var form = new formidable.IncomingForm();
   form.parse(req,function(err,fields,files){
@@ -161,12 +161,38 @@ exports.pay = function (req,res) {
         res.send("-1");
         return;
       }
-      res.send(order.ordernumber);
+      res.send(v._id);
     })
 
   })
 }
 
+//为用户增加订单
+exports.addorder = function (req,res) {
+  var id = req.query.id;
+  User.find({'username': req.session.username},function (err,results) {
+    if(err){res.send("-1");return;}
+    results[0].order.push(id);
+    results[0].save(function () {
+      res.send("1")
+    })
+
+  })
+}
+
+//获取订单列表
+exports.getorderlist = function (req,res) {
+  User.find({'username': req.session.username},function (err,results) {
+    if(err){res.send("-1");return;}
+    var orderlistid = results[0].order;
+    Order.find()
+      .where('_id').in(orderlistid)
+      .exec(function (err,results) {
+        res.send(results)
+      })
+
+  })
+}
 
 exports.allSeller = function (req,res) {
   Seller.find({},function (err,results) {

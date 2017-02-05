@@ -71,7 +71,8 @@ apiRoutes.get('/logout',router.logout);
 apiRoutes.get("/checkexist",router.checkExist);
 apiRoutes.post('/createuser',router.createuser);
 apiRoutes.post('/pay',router.pay);
-
+apiRoutes.get('/addorder',router.addorder);
+apiRoutes.get('/getorderlist',router.getorderlist);
 app.use(apiRoutes);
 
 

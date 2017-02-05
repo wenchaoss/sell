@@ -1,21 +1,13 @@
 <template>
   <div class="personal">
     <div class="personal_header">
-      <h1 class="title">我的</h1>
+      <h1 class="title">{{hashTitle}}</h1>
       <div class="go-back">
-        <span class="arrow" v-link="{path:'/home'}"><span class="arrowwhite"></span></span>
+        <span class="arrow" v-link="{path:'/'+hashback}"><span class="arrowwhite"></span></span>
       </div>
     </div>
-    <div class="info">
-      <div class="avatar"><img src="default_header.png"></div>
-      <div class="username">{{userdetail.username}}</div>
-    </div>
-    <split></split>
-    <div class="main">
-      <div class="order">所有订单</div>
-      <div class="rating">我的评价</div>
-      <div class="local">管理收货地址</div>
-    </div>
+    <router-view :userdetail="userdetail" :hash="hash"></router-view>
+
   </div>
 </template>
 
@@ -28,8 +20,37 @@
         type: Object
       }
     },
-    created() {
-
+    data() {
+      return {
+        hash: 'index'
+      }
+    },
+    computed: {
+      //根据hash决定返回哪个页面
+      hashback() {
+        if(this.hash === 'index'){
+          return 'home'
+        }else{
+          return 'personal'
+        }
+      },
+      //根据hash显示头部文字
+      hashTitle() {
+        if(this.hash === 'index'){
+          return '我的'
+        }else if(this.hash === 'orderlist'){
+          return '订单列表'
+        }else if(this.hash === 'address'){
+          return '管理收货地址'
+        }else if(this.hash === 'ratings'){
+          return '我的评价'
+        }
+      }
+    },
+    events: {
+      'changeGobackHash'(hash) {
+        this.hash = hash
+      }
     },
     components: {
       split
@@ -68,31 +89,6 @@
             border: 10px solid transparent
             border-right: 10px solid #fff
             border-right-color: rgb(0, 151, 255)
-    .info
-      position: relative
-      padding: 40px
-      padding-left: 100px
-      background: rgb(0, 151, 255)
-      color: #fff
-      font-weight: 700
-      font-size: 24px
-      .avatar
-        width: 60px
-        height: 60px
-        position: absolute
-        top: 25px
-        left: 20px
-        background-color: #fff
-        border-radius: 50%
-        overflow: hidden
-        img
-          width: 100%
 
-    .main
-      div
-        padding: 20px
-        padding-left: 30px
-        border-bottom: 1px solid rgb(221, 221, 221)
-        font-weight: 700
 </style>
 

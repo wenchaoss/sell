@@ -158,7 +158,6 @@
           alert("登录成功！")
           this.userdetail = res.data;
           this.$dispatch('checkuserdetail',this.userdetail)
-          console.log(this.userdetail)
         })
       },
       logout() {
@@ -195,7 +194,6 @@
           this.usernamebol = 1
         }else {
           this.$http.get('/checkexist?'+'username='+this.subinfo.username + '&subtype=' + this.subinfo.subtype).then((res) => {
-            console.log(res.body)
             //false 表示未被占用
             if(res.body == 'false'){
               this.usernamebol = 0;

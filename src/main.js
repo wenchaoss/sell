@@ -8,6 +8,10 @@ import goods from 'components/goods/goods';
 import ratings from 'components/ratings/ratings';
 import seller from 'components/seller/seller';
 import personal from 'components/personal/personal';
+import personal_orderlist from 'components/personal_orderlist/personal_orderlist';
+import personal_index from 'components/personal_index/personal_index';
+import personal_address from 'components/personal_address/personal_address';
+import personal_ratings from 'components/personal_ratings/personal_ratings';
 
 import 'common/stylus/index.styl';      //引入全局css样式
 
@@ -39,7 +43,21 @@ router.map({
     component: home
   },
   '/personal': {
-    component: personal
+    component: personal,
+    subRoutes: {
+      '/': {
+        component: personal_index
+      },
+      '/orderlist': {
+        component: personal_orderlist
+      },
+      '/address': {
+        component: personal_address
+      },
+      '/ratings': {
+        component: personal_ratings
+      }
+    }
   },
   '/detail':{
     component: App,

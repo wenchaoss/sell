@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
   "username": String,
   "password": String,
+  "order": [String]
 
 })
 //检查用户是否被占用

@@ -184,11 +184,6 @@
     events: {
       'cart.add'(target) {
         this._drop(target);
-      },
-      //清空购物车
-      clearshopcart(){
-        this.selectedFood = {};
-        console.log(111)
       }
     }
   };

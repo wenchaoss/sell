@@ -209,6 +209,10 @@
           price: this.totalPrice
         })
           .then((res) => {
+          this.$http.get('/addorder?'+'id='+res.body)
+            .then((res) => {
+
+            })
           this.empty()
           alert("支付成功！请到个人中心查看订单");
         });
