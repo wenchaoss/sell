@@ -17,8 +17,8 @@
         </div>
         <split></split>
       </li>
-
     </div>
+    <personal_orderdetail v-ref:detail></personal_orderdetail>
   </div>
 
 </template>
@@ -26,6 +26,7 @@
 <script type="text/ecmascript-6">
   import split from 'components/split/split';
   import {formatDate} from 'common/js/date';
+  import personal_orderdetail from 'components/personal_orderdetail/personal_orderdetail';
 
   export default {
     props: {
@@ -52,7 +53,8 @@
         })
     },
     components: {
-      split
+      split,
+      personal_orderdetail
     },
     filters: {
       formatDate(time) {
@@ -113,6 +115,7 @@
           .price
             display: inline-block
             float: right
+            font-weight: 700
 
 
 </style>
