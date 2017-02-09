@@ -5,7 +5,7 @@
       <h2>暂时没有外卖订单记录</h2>
     </div>
     <div class="orderlist" v-show="orderlist.length !== 0">
-      <li class="order-item" v-for="item in orderlist">
+      <li class="order-item" v-for="item in orderlist" @click="showOrder(item)">
         <div class="title">
           <h1 class="sellname">{{item.seller_name}}</h1>
           <h1 class="process">12323</h1>
@@ -18,7 +18,7 @@
         <split></split>
       </li>
     </div>
-    <personal_orderdetail v-ref:detail></personal_orderdetail>
+    <personal_orderdetail v-ref:detail :userdetail="userdetail" :order="order"></personal_orderdetail>
   </div>
 
 </template>
@@ -39,7 +39,8 @@
     },
     data() {
       return {
-        orderlist: []
+        orderlist: [],
+        order: {}
       }
     },
     created() {
@@ -49,8 +50,13 @@
       this.$http.get('/getorderlist')
         .then((res) => {
           this.orderlist = res.body;
-          console.log(this.orderlist)
         })
+    },
+    methods: {
+      showOrder(item) {
+        this.order = item;
+        this.$refs.detail.show();
+      }
     },
     components: {
       split,
