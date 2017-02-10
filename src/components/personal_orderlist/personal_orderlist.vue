@@ -8,7 +8,7 @@
       <li class="order-item" v-for="item in orderlist" @click="showOrder(item)">
         <div class="title">
           <h1 class="sellname">{{item.seller_name}}</h1>
-          <h1 class="process">12323</h1>
+          <h1 class="process">{{item.process}}</h1>
         </div>
         <div class="time">{{item.date | formatDate}}</div>
         <div class="footer">
@@ -41,6 +41,11 @@
       return {
         orderlist: [],
         order: {}
+      }
+    },
+    computed: {
+      itemprocess(item){
+        console.log(item)
       }
     },
     created() {

@@ -62,7 +62,7 @@
     <split></split>
     <div class="sellers">
       <ul>
-        <li v-for="seller in allseller" class="seller-item" v-link="{path:'/detail/goods'}" @click="changeSeller(seller)">
+        <li v-for="seller in allseller" v-show="seller.seller.checkout != 1" class="seller-item" v-link="{path:'/detail/goods'}" @click="changeSeller(seller)">
           <div class="icon">
             <img width="64" :src="seller.seller.avatar">
           </div>
@@ -134,6 +134,7 @@
     // },
     methods: {
       changeSeller(seller) {
+        console.log(seller)
         this.$dispatch('changeseller',seller)
       },
       login() {
@@ -144,7 +145,7 @@
           this.log.logintype = false;
         }
         this.$http.post('login',this.log).then((res) => {
-          // console.log(res.data)
+          console.log(res.data)
           if(res.data == -1){
             alert("对不起！服务器错误");
             return;

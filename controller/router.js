@@ -44,7 +44,7 @@ exports.login = function (req,res) {
     var password = fields.password;
     var passwordSha256 = hash.update(password).digest("hex");
     var type = fields.logintype;
-    if(type){
+    if(type) {
       User.find({'username': username},function (err ,results) {
         if(err) { res.send("-1"); return;}
         if(results.length == 0){
@@ -64,10 +64,25 @@ exports.login = function (req,res) {
         });
       })
     }else{
-      res.send("-1");
-      return;
+      Seller.find({'seller.username': username},function (err,results) {
+        if(err) { res.send("-1"); return;}
+        if(results.length == 0){
+          res.send("-2");
+          return;
+        }
+        if(results[0].seller.password != passwordSha256){
+          res.send("-3");
+          return;
+        }
+        req.session.login = true;
+        req.session.username = username;
+        req.session.usertype = false;      //用户状态为用户，false为商家
+        res.send( {
+          username: results[0].seller.username,
+          type: type
+        });
+      })
     }
-
   })
 }
 
@@ -82,11 +97,11 @@ exports.checkExist = function(req,res){
   var username = req.query.username;
   var type = req.query.subtype;     //true用户 false商家
   // console.log(username)
-  if(type){
+  if(type == 'true') {
     User.checkExist(username,function(bollean){
       res.send(bollean.toString());
     })
-  }else {
+  }else if(type == 'false'){
     Seller.checkExist(username,function(bollean){
       res.send(bollean.toString());
     })
@@ -107,7 +122,8 @@ exports.createuser = function(req,res){
     var hash = crypto.createHash("sha256");
     var passwordSha256 = hash.update(fields.password).digest("hex");
     var type = fields.subtype;
-    if(type) {
+    console.log(type)
+    if(type == 'true') {
       var u = new User({
         "username": fields.username,
         "password": passwordSha256
@@ -119,10 +135,15 @@ exports.createuser = function(req,res){
         }
         res.send("1");
       })
-    }else{
+    }else if(type == 'false'){
       var s = new Seller({
-        "username": fields.username,
-        "password": passwordSha256
+        "seller": {
+          "username": fields.username,
+          "password": passwordSha256,
+          "checkout": 1
+        },
+        "goods": [],
+        "ratings": []
       });
       s.save(function(err){
         if(err){
@@ -132,7 +153,13 @@ exports.createuser = function(req,res){
         res.send("1");
       })
     }
-
+    //给第二家设置调试账号密码   dierjia   yezizhuhao
+    // Seller.find({'seller.name': '第二家'},function (err, results) {
+    //   if(err) { res.send("-1"); return;}
+    //   results[0].seller.username = fields.username;
+    //   results[0].seller.password = passwordSha256;
+    //   results[0].save()
+    // })
   })
 };
 

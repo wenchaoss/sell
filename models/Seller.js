@@ -74,7 +74,7 @@ var sellerSchema = new Schema({
 //检查用户是否被占用
 sellerSchema.statics.checkExist = function(username,callback){
   //this指向类名，非Schema
-  this.find({'username': username},function(err,results){
+  this.find({'seller.username': username},function(err,results){
     if(results.length == 0){
       callback(false);
     }else{
