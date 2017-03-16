@@ -8,14 +8,15 @@
     <div class="main" v-show="userdetail.type">
       <div class="order" v-link="{path:'/personal/orderlist'}">所有订单</div>
       <div class="rating" v-link="{path:'/personal/ratings'}">我的评价</div>
+      <div class="local" v-link="{path:'/personal/phone'}">设置联系方式</div>
       <div class="local" v-link="{path:'/personal/address'}">管理收货地址</div>
     </div>
     <div class="main" v-show="!userdetail.type">
-      <div class="order">订单管理</div>
-      <div class="home">查看店铺主页</div>
-      <div class="rating">查看店铺评论</div>
-      <div class="changeinfo">修改店铺信息</div>
-      <div class="foods">管理店铺商品</div>
+      <div class="order" v-link="{path:'/personal/orderlist'}">订单管理</div>
+      <div class="home" v-link="{path:'/detail/goods'}"  @click="changeSeller()">查看店铺主页</div>
+      <div class="rating" >查看店铺评论</div>
+      <div class="changeinfo" >修改店铺信息</div>
+      <div class="foods" >管理店铺商品</div>
     </div>
   </div>
 </template>
@@ -33,12 +34,25 @@
       }
     },
     created() {
+      //验证登录
+      this.$http.get('/checkLogin').then((res) => {
+        if(!res.data.username){
+          window.location.href='/';
+          return;
+        }
+      })
       this.hash = 'index'
       console.log(this.userdetail)
       this.$dispatch('changeGobackHash',this.hash);
       if(!this.userdetail.type){
 
       }
+    },
+    methods: {
+      changeSeller() {
+        console.log(this.userdetail)
+        this.$dispatch('changeseller',this.userdetail)
+      },
     },
     components: {
       split

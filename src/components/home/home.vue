@@ -116,15 +116,16 @@
           subtype: true         //true默认注册用户
         },
         userdetail: {
-          username: '',
-          type: true
+          // username: '',
+          // type: true
         }
       }
     },
     created() {
+
       this.$http.get('/checkLogin').then((res) => {
         if(res.data){
-          this.userdetail = res.data.data;
+          this.userdetail = res.data;
           this.$dispatch('checkuserdetail',this.userdetail)
         }
       })
@@ -145,7 +146,7 @@
           this.log.logintype = false;
         }
         this.$http.post('login',this.log).then((res) => {
-          console.log(res.data)
+          // console.log(res.data)
           if(res.data == -1){
             alert("对不起！服务器错误");
             return;
@@ -158,6 +159,7 @@
           }
           alert("登录成功！")
           this.userdetail = res.data;
+          console.log(this.userdetail)
           this.$dispatch('checkuserdetail',this.userdetail)
         })
       },

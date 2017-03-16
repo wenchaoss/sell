@@ -17,6 +17,13 @@
       }
     },
     created() {
+      //验证登录
+      this.$http.get('/checkLogin').then((res) => {
+        if(!res.data.username){
+          window.location.href='/';
+          return;
+        }
+      })
       this.hash = 'ratings'
       this.$dispatch('changeGobackHash',this.hash)
     },

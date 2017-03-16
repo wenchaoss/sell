@@ -13,6 +13,11 @@ var webpackConfig = process.env.NODE_ENV === 'testing'
 var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/sell');
+// var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+//   replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };
+// var uri = 'mongodb://wenchao:yezizhuhao293@ds153689.mlab.com:53689/webmongo/sell';
+// mongoose.connect('mongodb://wenchao293:yezizhuhao293@ds153689.mlab.com:53689/webmongo')
+// mongoose.connect(uri,options);
 var app = express()
 //设置session
 app.use(session({
@@ -73,6 +78,11 @@ apiRoutes.post('/createuser',router.createuser);
 apiRoutes.post('/pay',router.pay);
 apiRoutes.get('/addorder',router.addorder);
 apiRoutes.get('/getorderlist',router.getorderlist);
+apiRoutes.get('/getsellerorder',router.getsellerorder);
+apiRoutes.get('/changephone',router.changephone);
+apiRoutes.post('/addaddress',router.addaddress);
+apiRoutes.get('/changeadr',router.changeadr);
+apiRoutes.get('/deleteadr',router.deleteadr);
 app.use(apiRoutes);
 
 

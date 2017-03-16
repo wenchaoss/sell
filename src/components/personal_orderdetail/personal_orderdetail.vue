@@ -54,6 +54,15 @@
         showFlag: false
       }
     },
+    created() {
+      //验证登录
+      this.$http.get('/checkLogin').then((res) => {
+        if(!res.data.username){
+          window.location.href='/';
+          return;
+        }
+      })
+    },
     methods: {
       show() {
         this.showFlag = true;

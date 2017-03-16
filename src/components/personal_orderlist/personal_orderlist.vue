@@ -49,13 +49,29 @@
       }
     },
     created() {
+      //验证登录
+      this.$http.get('/checkLogin').then((res) => {
+        if(!res.data.username){
+          window.location.href='/';
+          return;
+        }
+      })
       this.hash = 'orderlist';
       this.$dispatch('changeGobackHash',this.hash);
+      console.log(this.userdetail.type)
+      if((this.userdetail.type)) {
+        this.$http.get('/getorderlist')
+          .then((res) => {
+            this.orderlist = res.body;
+          })
+      }else{
+        this.$http.get('/getsellerorder')
+          .then((res) => {
+            // console.log(res.body)
+            this.orderlist = res.body;
+          })
+      }
 
-      this.$http.get('/getorderlist')
-        .then((res) => {
-          this.orderlist = res.body;
-        })
     },
     methods: {
       showOrder(item) {

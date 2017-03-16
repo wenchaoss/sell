@@ -10,13 +10,31 @@ var Order = require('../models/Order');
 //检查是否登录
 exports.checkLogin = function(req,res){
   if(req.session.login == true){
-    res.send({
-      data: {
-        username: req.session.username,
-        type: req.session.usertype
-      },
-      errno: 0
-    })
+    if(req.session.usertype) {
+      // console.log(true)
+      User.find({'username': req.session.username},function (err ,results) {
+        if(err) { res.send("-1"); return;}
+        res.send( {
+          username: results[0].username,
+          type: req.session.usertype,
+          order:  results[0].order,
+          phone: results[0].phone,
+          address: results[0].address
+        });
+      })
+    }else {
+      console.log(false)
+      Seller.find({'seller.username': req.session.username},function (err,results) {
+        if(err) { res.send("-1"); return;}
+        res.send( {
+          username: results[0].seller.username,
+          type: req.session.usertype,
+          seller: results[0].seller,
+          ratings: results[0].ratings,
+          goods: results[0].goods
+        });
+      })
+    }
   }else{
     res.send({
       data: {
@@ -60,7 +78,10 @@ exports.login = function (req,res) {
         req.session.usertype = true;      //用户状态为用户，false为商家
         res.send( {
           username: results[0].username,
-          type: type
+          type: type,
+          order:  results[0].order,
+          phone: results[0].phone,
+          address: results[0].address
         });
       })
     }else{
@@ -76,10 +97,14 @@ exports.login = function (req,res) {
         }
         req.session.login = true;
         req.session.username = username;
+        req.session._id = results[0]._id;
         req.session.usertype = false;      //用户状态为用户，false为商家
         res.send( {
           username: results[0].seller.username,
-          type: type
+          type: type,
+          seller: results[0].seller,
+          ratings: results[0].ratings,
+          goods: results[0].goods
         });
       })
     }
@@ -220,7 +245,65 @@ exports.getorderlist = function (req,res) {
 
   })
 }
+//获取商家订单列表
+exports.getsellerorder = function (req,res) {
+  if(!req.session._id) {return;}
+  Order.find({'seller_id': req.session._id},function (err,results) {
+    if(err){res.send("-1");return;}
+    res.send(results)
+  })
+}
+//修改用户手机号
+exports.changephone = function (req,res) {
+  var phone = req.query.phone;
+  User.find({"username": req.session.username},function (err,results) {
+    if(err){res.send("-1");return;}
+    console.log(results)
+    results[0].phone = phone;
+    results[0].save(function () {
+      res.send("1")
+    });
+  })
+}
+//增加收货地址
+exports.addaddress = function (req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    var address = fields.address;
+    User.find({"username": req.session.username},function (err,results) {
+      if(err){res.send("-1");return;}
+      results[0].address.push(address);
+      results[0].save();
+      res.send("1")
+    })
 
+  })
+}
+//修改收货地址
+exports.changeadr = function (req,res) {
+  var num = req.query.num;
+  User.find({"username": req.session.username},function (err,results) {
+    if(err){res.send("-1");return;}
+    var i = results[0].address.splice(num,1);
+    results[0].address.unshift(i);
+    results[0].save();
+    res.send("1")
+  })
+}
+//删除收货地址
+exports.deleteadr = function (req,res) {
+  var num = req.query.num;
+  User.find({"username": req.session.username},function (err,results) {
+    if(err){res.send("-1");return;}
+    results[0].address.splice(num,1);
+    results[0].save();
+    res.send("1")
+  })
+}
 exports.allSeller = function (req,res) {
   Seller.find({},function (err,results) {
     if(err){res.send("-1");return;}

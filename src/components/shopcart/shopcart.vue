@@ -161,6 +161,9 @@
         return show;
       }
     },
+    // created() {
+    //   console.log(this.userdetail)
+    // },
     methods:{
       toggleList() {
         if (!this.totalCount) {
@@ -191,6 +194,14 @@
           alert("商家不可购买！");
           return;
         }
+        if(!this.userdetail.phone){
+          alert("请先设置手机号！");
+          return;
+        }
+        if(!this.userdetail.address){
+          alert("请先设置收货地址！");
+          return;
+        }
         //避免污染selectFoods
         var newarr = [];
         this.selectFoods.forEach(function (value,index,arr) {
@@ -205,6 +216,8 @@
           user: this.userdetail.username,
           seller_id: this.seller._id,
           seller_name: this.seller.seller.name,
+          phone:this.userdetail.phone,
+          address:this.userdetail.address,
           foods: newarr,
           price: this.totalPrice
         })

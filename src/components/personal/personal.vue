@@ -25,6 +25,15 @@
         hash: 'index'
       }
     },
+    created() {
+      //验证登录
+      this.$http.get('/checkLogin').then((res) => {
+        if(!res.data.username){
+          window.location.href='/';
+          return;
+        }
+      })
+    },
     computed: {
       //根据hash决定返回哪个页面
       hashback() {
@@ -44,6 +53,8 @@
           return '管理收货地址'
         }else if(this.hash === 'ratings'){
           return '我的评价'
+        }else if(this.hash === 'phone'){
+          return '我的联系方式'
         }
       }
     },
