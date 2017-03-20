@@ -40,6 +40,14 @@
       },
       'checkuserdetail'(userdetail){
         this.userdetail = userdetail;
+      },
+      'refreshseller'(){
+        this.$http.get('/allSeller').then((res) => {
+          res = res.body;
+          if (res.errno === ERR_OK) {
+            this.allseller = res.data
+          }
+        });
       }
     }
   };

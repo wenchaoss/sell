@@ -123,6 +123,7 @@
         if (!event._constructed) {
           return;
         }
+        //转换为驼峰式
         let foodList = this.$els.foodsWrapper.getElementsByClassName('food-list-hook');
         let el = foodList[index];
         // console.log(el)

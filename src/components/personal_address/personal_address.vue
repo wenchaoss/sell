@@ -1,7 +1,10 @@
 <template>
   <div class="personal_address">
-    <div class="noaddress">您还没有设置收货地址！</div>
-    <split></split>
+    <div v-show = "!userdetail.address[0]">
+      <div class="noaddress">您还没有设置收货地址！</div>
+      <split></split>
+    </div>
+
     <div class="adrlist">
       <ul>
         <li v-for="item in userdetail.address"><label><input type="radio" v-model="address" value="{{$index}}">{{item}}</label></li>
@@ -70,7 +73,6 @@
             if(res.body == 1){
               var i = this.userdetail.address.splice(this.address,1);
               this.userdetail.address.unshift(i);
-              console.log(this.address)
               // this.address = "0"
               alert("修改成功！");
             }

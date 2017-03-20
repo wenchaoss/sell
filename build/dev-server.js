@@ -83,6 +83,10 @@ apiRoutes.get('/changephone',router.changephone);
 apiRoutes.post('/addaddress',router.addaddress);
 apiRoutes.get('/changeadr',router.changeadr);
 apiRoutes.get('/deleteadr',router.deleteadr);
+apiRoutes.get('/jiedan',router.jiedan);
+apiRoutes.get('/paisong',router.paisong);
+apiRoutes.get('/shouhuo',router.shouhuo);
+apiRoutes.post('/subrating',router.subrating);
 app.use(apiRoutes);
 
 

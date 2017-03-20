@@ -13,6 +13,7 @@ import personal_index from 'components/personal_index/personal_index';
 import personal_address from 'components/personal_address/personal_address';
 import personal_ratings from 'components/personal_ratings/personal_ratings';
 import personal_phone from 'components/personal_phone/personal_phone';
+import personal_changeseller from 'components/personal_changeseller/personal_changeseller';
 
 import 'common/stylus/index.styl';      //引入全局css样式
 
@@ -60,6 +61,9 @@ router.map({
       },
       '/phone': {
         component: personal_phone
+      },
+      '/changeinfo': {
+        component: personal_changeseller
       }
     }
   },

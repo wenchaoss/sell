@@ -2,6 +2,7 @@ var formidable = require("formidable");
 var fs = require("fs");
 var crypto = require("crypto");             //加密
 var url = require("url");
+var _ = require("underscore");
 
 var Seller = require('../models/Seller');
 var User = require('../models/User');
@@ -234,6 +235,7 @@ exports.addorder = function (req,res) {
 
 //获取订单列表
 exports.getorderlist = function (req,res) {
+  if(!req.session.type) {return;}
   User.find({'username': req.session.username},function (err,results) {
     if(err){res.send("-1");return;}
     var orderlistid = results[0].order;
@@ -304,6 +306,72 @@ exports.deleteadr = function (req,res) {
     res.send("1")
   })
 }
+//接单
+exports.jiedan = function (req,res) {
+  var num = req.query.num;
+  Order.find({"_id":num},function (err,results) {
+    if(err){res.send("-1");return;}
+    results[0].process = 1;
+    results[0].save();
+    res.send("1")
+  })
+}
+//派送
+exports.paisong = function (req,res) {
+  var num = req.query.num;
+  Order.find({"_id":num},function (err,results) {
+    if(err){res.send("-1");return;}
+    results[0].process = 2;
+    results[0].save();
+    res.send("1")
+  })
+}
+//收货
+exports.shouhuo = function (req,res) {
+  var num = req.query.num;
+  Order.find({"_id":num},function (err,results) {
+    if(err){res.send("-1");return;}
+    results[0].process = 3;
+    results[0].save();
+    res.send("1")
+  })
+}
+//发表评论
+exports.subrating = function (req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    var rating = fields;
+    var foods = fields.recommend;
+    var orderid = fields.orderId;
+    Seller.find({"_id": rating.seller_id},function (err,results) {
+      if(err){res.send("-1");return;}
+      results[0].ratings.push(rating);
+      foods.forEach(function (v,i,arr) {
+        results[0].goods.forEach(function (_v,_i,_arr) {
+          _v.foods.forEach(function (__v,__i,__arr) {
+            if(__v.name === v){
+              results[0].goods[_i].foods[__i].ratings.push(rating);
+            }
+          })
+        })
+      })
+      results[0].save();
+      Order.find({"_id": orderid},function (err,doc) {
+        if(err){res.send("-2");return;}
+        doc[0].process = 5;
+        doc[0].rating = rating;
+        doc[0].save();
+        res.send("1")
+      })
+    })
+  })
+}
+
+
 exports.allSeller = function (req,res) {
   Seller.find({},function (err,results) {
     if(err){res.send("-1");return;}

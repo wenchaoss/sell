@@ -55,6 +55,8 @@
           return '我的评价'
         }else if(this.hash === 'phone'){
           return '我的联系方式'
+        }else if(this.hash === 'changeseller'){
+          return '修改店铺信息'
         }
       }
     },

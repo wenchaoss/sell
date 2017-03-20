@@ -57,7 +57,34 @@ var sellerSchema = new Schema({
   //     ]
   //   }
   // ],
-  "goods": [],
+  "goods": [
+      {
+        "name": String,
+        // "type": String,
+        "foods": [
+          {
+            "image": String,
+            "icon": String,
+            "ratings": [
+              {
+                "avatar": String,
+                "text": String,
+                "rateType": String,
+                "rateTime": Number,
+                "username": String
+              }
+            ],
+            "name": String,           //餐品名
+            "price": String,          //价格
+            "oldPrice": String,       //原价
+            "description": String,    //介绍
+            "sellCount": Number,      //销量
+            "rating": Number,         //好评率（100）
+            "info": String,           //商品信息
+          }
+        ]
+      }
+  ],
   "ratings": [
     {
       "username": String,

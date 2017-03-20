@@ -102,7 +102,7 @@
       };
     },
     created() {
-      // console.log(this.userdetail,this.selectFoods)
+      console.log(this.userdetail,this.selectFoods)
     },
     computed: {
       //总价
@@ -219,7 +219,9 @@
           phone:this.userdetail.phone,
           address:this.userdetail.address,
           foods: newarr,
-          price: this.totalPrice
+          price: this.totalPrice,
+          phone: this.userdetail.phone,
+          address: this.userdetail.address[0]
         })
           .then((res) => {
           this.$http.get('/addorder?'+'id='+res.body)
