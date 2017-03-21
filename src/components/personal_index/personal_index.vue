@@ -41,7 +41,7 @@
         }
       })
       this.hash = 'index'
-      console.log(this.userdetail)
+      // console.log(this.userdetail)
       this.$dispatch('changeGobackHash',this.hash);
       if(!this.userdetail.type){
 
@@ -49,7 +49,7 @@
     },
     methods: {
       changeSeller() {
-        console.log(this.userdetail)
+        // console.log(this.userdetail)
         this.$dispatch('changeseller',this.userdetail)
       },
     },

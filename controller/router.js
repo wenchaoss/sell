@@ -370,7 +370,74 @@ exports.subrating = function (req,res) {
     })
   })
 }
+//增加商家信息
+exports.addinfo = function (req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    var info = fields.info;
+    Seller.find({"_id": req.session._id},function (err,results) {
+      if(err){res.send("-1");}
+      // console.log(info,results[0].seller)
+      results[0].seller.infos.push(info);
+      results[0].save();
+      res.send("1");
+    })
 
+  })
+}
+//删除商家信息
+exports.deinfo = function (req,res) {
+  var num = req.query.num;
+  Seller.find({"_id": req.session._id},function (err,results) {
+    if(err){res.send("-1");return;}
+    results[0].seller.infos.splice(num,1);
+    results[0].save();
+    res.send("1")
+  })
+}
+//修改商家基础信息
+exports.changebaseinfo = function (req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    Seller.find({"_id": req.session._id},function (err,results) {
+      if(err){res.send("-1");}
+      // console.log(info,results[0].seller)
+      results[0].seller.deliveryPrice = fields.deliveryPrice
+      results[0].seller.name = fields.name;
+      results[0].seller.description = fields.description;
+      results[0].seller.minPrice = fields.minPrice;
+      results[0].save();
+      res.send("1");
+    })
+
+  })
+}
+//修改商家公告
+exports.changebulletin = function (req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    Seller.find({"_id": req.session._id},function (err,results) {
+      if(err){res.send("-1");}
+      // console.log(info,results[0].seller)
+      results[0].seller.bulletin = fields.bulletin
+      results[0].save();
+      res.send("1");
+    })
+
+  })
+}
 
 exports.allSeller = function (req,res) {
   Seller.find({},function (err,results) {

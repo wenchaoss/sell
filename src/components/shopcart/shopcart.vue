@@ -102,7 +102,7 @@
       };
     },
     created() {
-      console.log(this.userdetail,this.selectFoods)
+      // console.log(this.userdetail,this.selectFoods)
     },
     computed: {
       //总价

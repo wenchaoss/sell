@@ -133,7 +133,7 @@
       }
   },
     created() {
-      console.log(this.order)
+      // console.log(this.order)
       //验证登录
       this.$http.get('/checkLogin').then((res) => {
         if(!res.data.username){

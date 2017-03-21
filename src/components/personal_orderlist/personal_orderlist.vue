@@ -77,7 +77,7 @@
 
       this.hash = 'orderlist';
       this.$dispatch('changeGobackHash',this.hash);
-      console.log(this.userdetail)
+      // console.log(this.userdetail)
       if((this.userdetail.type)) {
         this.$http.get('/getorderlist')
           .then((res) => {
@@ -86,7 +86,7 @@
       }else if(!this.userdetail.type){
         this.$http.get('/getsellerorder')
           .then((res) => {
-            console.log(res.body)
+            // console.log(res.body)
             this.orderlist = res.body;
           })
       }
@@ -98,7 +98,7 @@
     methods: {
       showOrder(item) {
         this.order = item;
-        console.log(this.order,111)
+        // console.log(this.order,111)
         this.$refs.detail.show();
       },
       //初始化better-scroll,实现滑动

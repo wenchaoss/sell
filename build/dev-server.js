@@ -87,6 +87,12 @@ apiRoutes.get('/jiedan',router.jiedan);
 apiRoutes.get('/paisong',router.paisong);
 apiRoutes.get('/shouhuo',router.shouhuo);
 apiRoutes.post('/subrating',router.subrating);
+apiRoutes.post('/addinfo',router.addinfo);
+apiRoutes.get('/deinfo',router.deinfo);
+apiRoutes.post('/changebaseinfo',router.changebaseinfo);
+apiRoutes.post('/changebulletin',router.changebulletin);
+
+
 app.use(apiRoutes);
 
 
