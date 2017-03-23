@@ -15,7 +15,7 @@
       <div class="order" v-link="{path:'/personal/orderlist'}">订单管理</div>
       <div class="home" v-link="{path:'/detail/goods'}"  @click="changeSeller()">查看店铺主页</div>
       <div class="changeinfo" v-link="{path:'/personal/changeinfo'}">修改店铺信息</div>
-      <div class="foods" >管理店铺商品</div>
+      <div class="foods" v-link="{path:'/personal/managegoods'}" >管理店铺商品</div>
     </div>
   </div>
 </template>

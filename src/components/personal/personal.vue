@@ -57,6 +57,8 @@
           return '我的联系方式'
         }else if(this.hash === 'changeseller'){
           return '修改店铺信息'
+        }else if(this.hash === 'managegoods'){
+          return '管理店铺商品'
         }
       }
     },
