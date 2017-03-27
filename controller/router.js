@@ -12,7 +12,6 @@ var Order = require('../models/Order');
 exports.checkLogin = function(req,res){
   if(req.session.login == true){
     if(req.session.usertype) {
-      // console.log(true)
       User.find({'username': req.session.username},function (err ,results) {
         if(err) { res.send("-1"); return;}
         res.send( {
@@ -24,7 +23,6 @@ exports.checkLogin = function(req,res){
         });
       })
     }else {
-      console.log(false)
       Seller.find({'seller.username': req.session.username},function (err,results) {
         if(err) { res.send("-1"); return;}
         res.send( {
@@ -235,7 +233,7 @@ exports.addorder = function (req,res) {
 
 //获取订单列表
 exports.getorderlist = function (req,res) {
-  if(!req.session.type) {return;}
+  // if(!req.session.type) {return;}
   User.find({'username': req.session.username},function (err,results) {
     if(err){res.send("-1");return;}
     var orderlistid = results[0].order;
@@ -438,6 +436,68 @@ exports.changebulletin = function (req,res) {
 
   })
 }
+//删除商品分类
+exports.removeType = function(req,res){
+  var num = req.query.num;
+  Seller.find({"_id": req.session._id},function (err,results) {
+    if(err){res.send("-1");return;}
+    results[0].goods.splice(num,1);
+    results[0].save();
+    res.send("1")
+  })
+}
+//增加商品分类
+exports.addType = function (req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    Seller.find({"_id": req.session._id},function (err,results) {
+      if(err){res.send("-1");}
+      results[0].goods.push({
+        "foods":[],
+        name: fields.newType
+      })
+      results[0].save();
+      res.send("1");
+    })
+
+  })
+}
+//更改商品
+exports.changegood = function (req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    var detail = fields;
+    var name = detail.oldname;
+    Seller.find({"_id": req.session._id},function (err,results) {
+      if(err){res.send("-1");}
+      results[0].goods.forEach(function (v,i) {
+        v.foods.forEach(function (_v,_i) {
+          // _v.forEach(function (__v,__i) {
+            if(_v.name === name){
+              for(k in detail){
+                if(detail[k])
+                _v[k] = detail[k];
+              }
+            }
+          // })
+        })
+      })
+      results[0].save();
+      res.send("1");
+    })
+
+  })
+}
+
+
 
 exports.allSeller = function (req,res) {
   Seller.find({},function (err,results) {

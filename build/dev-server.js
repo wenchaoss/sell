@@ -91,6 +91,9 @@ apiRoutes.post('/addinfo',router.addinfo);
 apiRoutes.get('/deinfo',router.deinfo);
 apiRoutes.post('/changebaseinfo',router.changebaseinfo);
 apiRoutes.post('/changebulletin',router.changebulletin);
+apiRoutes.post('/addType',router.addType);
+apiRoutes.get('/removeType',router.removeType);
+apiRoutes.post('/changegood',router.changegood);
 
 
 app.use(apiRoutes);

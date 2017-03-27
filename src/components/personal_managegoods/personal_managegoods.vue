@@ -6,13 +6,13 @@
         <ul>
           <li v-for="item in goodType"><label><input type="radio" v-model="goodTypeNum" value="{{$index}}">{{item}}</label></li>
         </ul>
-        <input type="text" v-model="newType" class="newType" ><input type="button" class="btn" value="增加"><input type="button" class="btn" value="移除">
+        <input type="text" v-model="newType" class="newType" ><input type="button" class="btn" @click="addType" value="增加"><input @click="removeType" type="button" class="btn" value="移除">
       </div>
     </div>
     <split></split>
     <div class="foodlist">
       <ul>
-        <li class="good-item" v-for="food in goodList" @click="selectFood(food,$event)">
+        <li class="good-item" v-for="food in goodList" @click="showOrder(food)">
           <div class="icon">
             <img width="57" :src="food.icon">
           </div>
@@ -30,12 +30,13 @@
         </li>
       </ul>
     </div>
-    <personal_gooddetail v-ref:detail :userdetail="userdetail" :order="order"></personal_gooddetail>
+    <personal_gooddetail v-ref:detail :userdetail="userdetail" :good="good"></personal_gooddetail>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import split from 'components/split/split';
+  import personal_gooddetail from 'components/personal_gooddetail/personal_gooddetail';
 
   export default {
     props: {
@@ -54,7 +55,8 @@
         goodList: [],
         //存放字符串
         goodnameList:[],
-        good:{}
+        good:{},
+        newType:''
       }
     },
     created() {
@@ -84,15 +86,41 @@
           }
         })
       })
-      console.log(this.goodList)
     },
     methods: {
-      selectFood: function () {
-
+      showOrder(item) {
+        this.good = item;
+        console.log(this.good,111)
+        this.$refs.detail.show();
+      },
+      removeType() {
+        var e = confirm("请注意，删除分类会删除此分类下所有商品，请提前将商品转移至其他分类，请选择是否继续操作")
+        if(e == true){
+          this.$http.get('/removeType?'+'num='+this.goodTypeNum)
+            .then((res) => {
+              if(res.body == 1){
+                alert("删除成功！");
+                this.$dispatch('refreshseller');
+                this.goodType.splice(this.goodTypeNum,1);
+              }
+            })
+        }
+      },
+      addType() {
+        this.$http.post('/addType',{
+          newType: this.newType
+        })
+          .then((res) => {
+            if(res.body!="1"){alert("对不起！服务器错误");return;}
+            this.goodType.push(this.newType);
+            this.$dispatch('refreshseller');
+            alert("添加成功!");
+          })
       }
     },
     components: {
-      split
+      split,
+      personal_gooddetail
     }
   }
 </script>
