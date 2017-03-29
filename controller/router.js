@@ -496,8 +496,73 @@ exports.changegood = function (req,res) {
 
   })
 }
+//上传图片
+exports.addpic = function (req,res) {
+  var form = new formidable.IncomingForm();
+  //设置上传目录
+  form.uploadDir = "./uploads";
+  form.parse(req, function(err, fields, files) {
+    //确认有文件上来
+    if(files.length == 0){
+      res.send("非法操作，请上传图片！");
+      return;
+    }
+    //改名逻辑
+    //改名，给上传的文件加上.jpg后缀
+    fs.rename("./" + files.tupian.path , "./" + files.tupian.path + ".jpg",function(err){
+      if(err){
 
+        res.send("改名失败，请重新上传图片！");
+        return;
+      }
+      // console.log(files.tupian.path.substr(8)+',jpg')
+      req.session.newpicname = files.tupian.path.substr(8)+'.jpg';
+      res.send(req.session.newpicname)
+    })
 
+  });
+}
+//增加商品
+exports.addgood = function (req,res) {
+
+  var form = new formidable.IncomingForm();
+  form.parse(req,function(err,fields,files){
+    if(err){
+      res.send("-1");
+      return;
+    }
+    if(!fields.newPicRef){
+      res.send("-2");
+      return;
+    }
+    var gooditem = {
+      "image": fields.newPicRef,
+      "icon": fields.newPicRef,
+      "info": fields.info,
+      "rating": 0,
+      "sellCount": 0,
+      "description": fields.description,
+      "name": fields.name,
+      "price": fields.price,
+      "oldPrice": fields.oldPrice,
+      "ratings": []
+    }
+    Seller.find({"_id": req.session._id},function (err,results) {
+      if(err){res.send("-1");}
+      results[0].goods.forEach(function (v,i) {
+        fields.typeNum.forEach(function (_v,_i) {
+          if(_v == i){
+            results[0].goods[i].foods.push(gooditem);
+          }
+        })
+
+      })
+      results[0].save();
+      res.send("1");
+    })
+
+  })
+}
 
 exports.allSeller = function (req,res) {
   Seller.find({},function (err,results) {

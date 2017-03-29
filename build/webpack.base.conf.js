@@ -19,7 +19,8 @@ module.exports = {
       //简化路径书写
       'src': path.resolve(__dirname, '../src'),
       'components': path.resolve(__dirname, '../src/components'),
-      'common': path.resolve(__dirname, '../src/common')
+      'common': path.resolve(__dirname, '../src/common'),
+      'jquery': path.resolve(__dirname, '../node_modules/jquery/src/jquery'),
     }
   },
   resolveLoader: {

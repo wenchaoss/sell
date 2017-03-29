@@ -94,10 +94,13 @@ apiRoutes.post('/changebulletin',router.changebulletin);
 apiRoutes.post('/addType',router.addType);
 apiRoutes.get('/removeType',router.removeType);
 apiRoutes.post('/changegood',router.changegood);
+apiRoutes.post('/addpic',router.addpic);      //表单上传图片
+apiRoutes.post('/addgood',router.addgood);
 
 
 app.use(apiRoutes);
-
+//设置静态资源目录
+app.use(express.static("./uploads"));
 
 
 

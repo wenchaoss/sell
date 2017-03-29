@@ -135,7 +135,7 @@
     // },
     methods: {
       changeSeller(seller) {
-        console.log(seller)
+        // console.log(seller)
         this.$dispatch('changeseller',seller)
       },
       login() {

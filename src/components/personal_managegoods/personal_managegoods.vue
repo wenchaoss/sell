@@ -1,5 +1,6 @@
 <template>
   <div class="personal_managegoods">
+    <input type="button" class="addgood" value="增加新商品" @click="addGood">
     <div class="type">
       <h1>分类：</h1>
       <div class="tylelist">
@@ -31,12 +32,15 @@
       </ul>
     </div>
     <personal_gooddetail v-ref:detail :userdetail="userdetail" :good="good"></personal_gooddetail>
+    <personal_addgood v-ref:addgood :userdetail="userdetail" :goodtype="goodType" :good="good"></personal_addgood>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import BScroll from 'better-scroll';
   import split from 'components/split/split';
   import personal_gooddetail from 'components/personal_gooddetail/personal_gooddetail';
+  import personal_addgood from 'components/personal_addgood/personal_addgood';
 
   export default {
     props: {
@@ -69,7 +73,7 @@
       })
       this.hash = 'managegoods'
       this.$dispatch('changeGobackHash',this.hash);
-      console.log(this.userdetail.goods)
+      // console.log(this.userdetail.goods)
       if(!this.userdetail.goods){
         return;
       }
@@ -86,12 +90,16 @@
           }
         })
       })
+      // console.log(this.goodType)
     },
     methods: {
       showOrder(item) {
         this.good = item;
-        console.log(this.good,111)
+        // console.log(this.good,111)
         this.$refs.detail.show();
+      },
+      addGood(){
+        this.$refs.addgood.show();
       },
       removeType() {
         var e = confirm("请注意，删除分类会删除此分类下所有商品，请提前将商品转移至其他分类，请选择是否继续操作")
@@ -120,13 +128,19 @@
     },
     components: {
       split,
-      personal_gooddetail
+      personal_gooddetail,
+      personal_addgood
     }
   }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
   .personal_managegoods
+    .addgood
+      position: fixed
+      padding: 6px
+      right: 15px
+      bottom: 15px
     .type
       padding-bottom: 5px
       h1
